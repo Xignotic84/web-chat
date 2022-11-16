@@ -7,7 +7,8 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  Text
+  Text,
+  Tag
 } from "@chakra-ui/react";
 import ProfileOverlay from "./profileOverlay";
 
@@ -18,16 +19,15 @@ export default function Message({data}) {
           <Box top={'0.5'} opacity={"70%"} right={0} position={"absolute"}>
             {new Date(data.timestamp).toDateString()}
           </Box>
-
           <Box>
             <Popover isLazy placement='bottom-start'>
               <Box display={"flex"}>
                 <PopoverTrigger>
                   <Avatar cursor={"pointer"} size={"md"} name={data.author.username}/>
                 </PopoverTrigger>
-                <Box mt={2}>
-                  <PopoverTrigger>
-                    <Text  color={"colors.text.gray"} ml={3} cursor={"pointer"}>
+                <Box>
+                  <PopoverTrigger w={"fit-content"}>
+                    <Text color={"text.gray"} ml={3} cursor={"pointer"}>
                       {data.author.username}
                     </Text>
                   </PopoverTrigger>
@@ -36,15 +36,21 @@ export default function Message({data}) {
                   </Text>
                 </Box>
               </Box>
-              <PopoverContent>
+              <PopoverContent bg={"backgrounds.secondary"}>
                 <PopoverHeader fontWeight='semibold'>
-                  <Box>
+                  <Box p={2} display={"flex"} alignItems={"center"}>
                     <Avatar cursor={"pointer"} size={"lg"} name={data.author.username}/>
-                    {data.author.username}
+                    <Box ml={2}>
+                      <Text>
+                        {data.author.username}
+                      </Text>
+                      <Tag size={"sm"} variant={"outline"} colorScheme={"linkedin"}>
+                        {data.author.role || "Member"}
+                      </Tag>
+                    </Box>
                   </Box>
                 </PopoverHeader>
-                <PopoverArrow/>
-                <PopoverCloseButton/>
+                <PopoverArrow bg={"backgrounds.secondary"}/>
                 <PopoverBody>
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                   tempor incididunt ut labore et dolore.

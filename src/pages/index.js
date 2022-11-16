@@ -5,6 +5,7 @@ import Message from "../components/message";
 import {AuthService} from "../services/Auth";
 
 import config from './../config.json'
+import MembersList from "../components/MembersList";
 
 const names = ["Alex", "James", "Franz", "Daniel"]
 const name = names[Math.floor(Math.random()*names.length)];
@@ -15,25 +16,50 @@ let socket
 export default function Home() {
   const [messageToSend, setMessageToSend] = useState("");
   const [messages, setMessages] = useState([])
+  const [listOfUsers, setListOfUsers] = useState([])
 
   useEffect(() => {
     fetch(`${config.api.baseURL}/socket`)
     socket = io({reconnectionAttempts: 5, query: {token: AuthService.generateJSWToken({username: "Xignotic"})}})
 
     if (socket) {
-      socket.on('broadCastMessage', (msg) => {
+
+      socket.emit("joinRoom", {username: name})
+  
+      socket.on('broadcastMessage', (msg) => {
         console.log("Received Message", msg.message)
         setMessages((currentMsg) => [
           ...currentMsg,
           msg,
+        ])
+        socket.off("broadcastMessage", msg)
+      })
+
+      socket.on("userJoinedRoom", user => {
+        console.log(true)
+        setListOfUsers((currentUsers) => [
+          ...currentUsers,
+          user
+        ])
+
+      })
+
+      socket.on("broadcastNotification", msg => {
+        setMessages((currentMsg) => [
+          ...currentMsg,
+          msg,
         ]);
-        socket.off("broadCastMessage", msg)
-      });
+      })
+    }
+
+    return () => {
+      socket.off()
     }
   }, [])
 
 
   function sendMessage() {
+    console.log(1, listOfUsers)
     const msgObj = {
       author: {
         username: name
@@ -60,6 +86,9 @@ export default function Home() {
 
   return (
       <Center>
+        <Box>
+          <MembersList members={listOfUsers}/>
+        </Box>
         <Box w={"50%"} >
           <Box>
             {messages.map(msg => {
@@ -70,7 +99,6 @@ export default function Home() {
               display={"flex"}
               position={"fixed"}
               bottom={4}
-              left={"30%"}
           >
             <Textarea
                 w={"800px"}

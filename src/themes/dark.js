@@ -15,7 +15,10 @@ export const darkTheme = {
   },
   colors: {
     text: {
-      "gray": "gray"
+      "gray": "#3163ED"
     },
+    backgrounds: {
+      secondary: "#2C302E"
+    }
   }
 }

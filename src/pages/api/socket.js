@@ -2,6 +2,7 @@ import {Server} from "socket.io";
 
 const jwt = require('jsonwebtoken');
 
+import {UserService} from "../../services/User";
 
 export default function SocketHandler(req, res) {
   if (!res.socket.server.io) {
@@ -22,16 +23,37 @@ export default function SocketHandler(req, res) {
     }).on('connection', socket => {
       console.log("[SERVER] Connection Created")
 
+      socket.on("joinRoom", (arg) => {
+        console.log(Object.keys(io.engine.clients), socket.id)
+
+        const user = UserService.adduserToRoom({id: socket.id, username: arg})
+
+        console.log(arg)
+        console.log(true)
+        socket.broadcast.emit("userJoinedRoom", user)
+      })
+
       socket.on("sendMessage", (arg) => {
+
         console.log("[SERVER] Received Message", arg.message)
-        socket.broadcast.emit('broadCastMessage', arg)
+
+        socket.broadcast.emit('broadcastMessage', arg)
+      })
+
+      socket.on("disconnect", (arg) => {
+        console.log("[SERVER] Connection Disconnected")
+
+        socket.broadcast.emit("broadcastNotification", {
+          author: {
+            username: "Admin"
+          },
+          message: "User has left",
+          timestamp: new Date().getTime()
+        })
+
       })
     })
 
-
-    io.on('disconnect', socket => {
-      console.log("[SERVER] Connection Disconnected")
-    })
 
     res.socket.server.io = io
   } else {
