@@ -24,12 +24,16 @@ export default function SocketHandler(req, res) {
       console.log("[SERVER] Connection Created")
 
       socket.on("joinRoom", (arg) => {
-        console.log(Object.keys(io.engine.clients), socket.id)
+        const user = UserService.adduserToRoom({id: socket.id, ...arg})
 
-        const user = UserService.adduserToRoom({id: socket.id, username: arg})
+        socket.broadcast.emit("broadcastNotification", {
+          author: {
+            username: "Admin"
+          },
+          message: "User has joined",
+          timestamp: new Date().getTime()
+        })
 
-        console.log(arg)
-        console.log(true)
         socket.broadcast.emit("userJoinedRoom", user)
       })
 

@@ -25,6 +25,11 @@ export default function Home() {
     if (socket) {
 
       socket.emit("joinRoom", {username: name})
+
+      setListOfUsers((currentUsers) => [
+        ...currentUsers,
+        {username: name}
+      ])
   
       socket.on('broadcastMessage', (msg) => {
         console.log("Received Message", msg.message)
@@ -36,12 +41,10 @@ export default function Home() {
       })
 
       socket.on("userJoinedRoom", user => {
-        console.log(true)
         setListOfUsers((currentUsers) => [
           ...currentUsers,
           user
         ])
-
       })
 
       socket.on("broadcastNotification", msg => {
@@ -86,14 +89,14 @@ export default function Home() {
 
   return (
       <Center>
-        <Box>
-          <MembersList members={listOfUsers}/>
-        </Box>
         <Box w={"50%"} >
           <Box>
             {messages.map(msg => {
               return <Message data={msg}/>
             })}
+          </Box>
+          <Box>
+            <MembersList members={listOfUsers}/>
           </Box>
           <Box
               display={"flex"}

@@ -9,9 +9,10 @@ export default function MembersList({members}) {
   return (
     <Box>
       {members.map(m => {
-        {console.log(m)}
-        return <Box display={"flex"}>
-          <Avatar>
+        return <Box key={m.id} display={"flex"}>
+          <Avatar
+            name={m.username}
+          >
             <AvatarBadge boxSize='1.25em' bg={m.status === "online" ? 'green.500' : "orange"} />
           </Avatar>
           <Text>
