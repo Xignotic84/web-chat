@@ -26,8 +26,9 @@ export default function SocketHandler(req, res) {
       socket.on("joinRoom", (arg) => {
         const user = UserService.adduserToRoom({id: socket.id, ...arg})
 
+        console.log(user)
         socket.broadcast.emit("broadcastNotification", {
-          author: {
+          user: {
             username: "Admin"
           },
           message: "User has joined",
@@ -46,9 +47,12 @@ export default function SocketHandler(req, res) {
 
       socket.on("disconnect", (arg) => {
         console.log("[SERVER] Connection Disconnected")
+        const user = UserService.adduserToRoom({id: socket.id, ...arg})
+
+        socket.broadcast.emit("userLeftRoom", user)
 
         socket.broadcast.emit("broadcastNotification", {
-          author: {
+          user: {
             username: "Admin"
           },
           message: "User has left",

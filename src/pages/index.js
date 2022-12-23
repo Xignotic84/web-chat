@@ -3,12 +3,15 @@ import {useState, useEffect} from "react";
 import {Box, Button, Center, Input, Text, Textarea} from "@chakra-ui/react";
 import Message from "../components/message";
 import {AuthService} from "../services/Auth";
+import {darkTheme} from "../themes/dark";
 
 import config from './../config.json'
-import MembersList from "../components/MembersList";
+import MembersList from "../components/membersList";
 
 const names = ["Alex", "James", "Franz", "Daniel"]
-const name = names[Math.floor(Math.random()*names.length)];
+const username = names[Math.floor(Math.random() * names.length)];
+const colorKeys = Object.values(darkTheme.colors.users)
+const color = colorKeys[Math.floor(Math.random() * colorKeys.length)];
 
 let socket
 
@@ -24,13 +27,15 @@ export default function Home() {
 
     if (socket) {
 
-      socket.emit("joinRoom", {username: name})
+      socket.emit("joinRoom", {username, color})
+
+      console.log(color)
 
       setListOfUsers((currentUsers) => [
         ...currentUsers,
-        {username: name}
+        {username, color}
       ])
-  
+
       socket.on('broadcastMessage', (msg) => {
         console.log("Received Message", msg.message)
         setMessages((currentMsg) => [
@@ -45,6 +50,11 @@ export default function Home() {
           ...currentUsers,
           user
         ])
+      })
+
+      socket.on("userLeftRoom", user => {
+        console.log(true)
+        setListOfUsers((currentUsers) => currentUsers.filter(u => u.id !== user.id))
       })
 
       socket.on("broadcastNotification", msg => {
@@ -62,14 +72,17 @@ export default function Home() {
 
 
   function sendMessage() {
-    console.log(1, listOfUsers)
+    if (!messageToSend || messageToSend.length === 0) return
+
     const msgObj = {
-      author: {
-        username: name
+      user: {
+        username,
+        color
       },
       message: messageToSend,
       timestamp: new Date().getTime()
     }
+
     socket.emit('sendMessage', msgObj)
 
     setMessages((currentMsg) => [
@@ -88,34 +101,41 @@ export default function Home() {
   }
 
   return (
-      <Center>
-        <Box w={"50%"} >
-          <Box>
-            {messages.map(msg => {
-              return <Message data={msg}/>
-            })}
+      <Box overflow={"hidden"}>
+        <Center overflow={"hidden"}>
+          <Box w={"50%"}>
+            <Box>
+              {messages.map(msg => {
+                return <Message data={msg}/>
+              })}
+            </Box>
+            <Box
+                display={"flex"}
+                position={"fixed"}
+                bottom={4}
+            >
+              <Text>
+
+              </Text>
+              <Textarea
+                  border={"none"}
+                  outline={"none"}
+                  w={"800px"}
+                  rows={0}
+                  minHeight={"20px"}
+                  value={messageToSend}
+                  onChange={(event) => setMessageToSend(event.target.value)}
+                  onKeyPress={(e) => handleKeyPress(e)}
+              />
+              <Button onClick={() => sendMessage("test")}>
+                Send
+              </Button>
+            </Box>
           </Box>
-          <Box>
-            <MembersList members={listOfUsers}/>
-          </Box>
-          <Box
-              display={"flex"}
-              position={"fixed"}
-              bottom={4}
-          >
-            <Textarea
-                w={"800px"}
-                rows={0}
-                minHeight={"20px"}
-                value={messageToSend}
-                onChange={(event) => setMessageToSend(event.target.value)}
-                onKeyPress={(e) => handleKeyPress(e)}
-            />
-            <Button onClick={() => sendMessage("test")}>
-              Send
-            </Button>
-          </Box>
+        </Center>
+        <Box  w={"20%"} h={"100%"} position={"fixed"} top={0} right={0}>
+          <MembersList members={listOfUsers}/>
         </Box>
-      </Center>
+      </Box>
   )
 }

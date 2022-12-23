@@ -1,6 +1,4 @@
-const connectedUsers = []
-
-
+let connectedUsers = []
 export class UserService {
 
 
@@ -11,6 +9,11 @@ export class UserService {
 
   static getUser(socketID) {
     return connectedUsers.filter(u => u.id === socketID)
+  }
+
+  static removeUserFromRoom(user) {
+    connectedUsers = connectedUsers.map((u) => u.id !== user.id)
+    return user
   }
 
 
