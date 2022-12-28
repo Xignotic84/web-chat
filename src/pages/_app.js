@@ -1,13 +1,20 @@
-import {ChakraProvider, extendTheme} from "@chakra-ui/react";
+import {ChakraProvider, extendTheme, useColorMode, Button} from "@chakra-ui/react";
 import {darkTheme} from '../themes/dark.js'
-import App from "next/app";
-import Cookies from 'cookies'
-import config from './../config.json'
+import { MoonIcon, SunIcon } from '@chakra-ui/icons';
+import {SocketProvider} from "../context/socket";
+
 
 
 function MyApp({ Component, pageProps }) {
+  const { colorMode, toggleColorMode } = useColorMode();
+
   return <ChakraProvider theme={extendTheme(darkTheme)}>
-    <Component {...pageProps} background={"background"} />
+    <Button onClick={toggleColorMode}>
+      {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+    </Button>
+    <SocketProvider>
+      <Component {...pageProps} background={"background"} />
+    </SocketProvider>
   </ChakraProvider>
 }
 

@@ -16,22 +16,22 @@ export default function Message({data}) {
   return (
       <Box m={7}>
         <Box display={"flex"} position={"relative"}>
-          <Box top={'0.5'} opacity={"70%"} right={0} position={"absolute"}>
+          <Box top={'0.5'} color={"gray"} opacity={"70%"} right={0} position={"absolute"}>
             {moment(data.timestamp).calendar()}
           </Box>
           <Box>
             <Popover isLazy placement='bottom-start'>
               <Box display={"flex"}>
                 <PopoverTrigger>
-                  <Avatar cursor={"pointer"} size={"md"} name={data.user.username}/>
+                  <Avatar bg={data.user.color} cursor={"pointer"} size={"md"} name={data.user.username}/>
                 </PopoverTrigger>
                 <Box>
                   <PopoverTrigger w={"fit-content"}>
-                    <Text color={data.user.color} ml={3} cursor={"pointer"}>
-                      [{data.user.username}]
-                    </Text>
+                    <Tag variant={"subtle"} bg={data.user.color} color={"black"} ml={3} cursor={"pointer"}>
+                      {data.user.username}
+                    </Tag>
                   </PopoverTrigger>
-                  <Text ml={3} whiteSpace={"pre-wrap"}>
+                  <Text ml={3} color={"black"} whiteSpace={"pre-wrap"}>
                     {data.message}
                   </Text>
                 </Box>

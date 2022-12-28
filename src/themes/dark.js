@@ -9,15 +9,17 @@ export const darkTheme = {
   styles: {
     global: (props) => ({
       body: {
-        bg: mode("white", "#110f18")(props),
-      }
+        bg: mode("white", "#F2F5F9")(props),
+        color: "black",
+      },
     })
   },
   colors: {
     text: {
-      "gray": "#3163ED"
+      "gray": "gray"
     },
     backgrounds: {
+      main: "#F2F5F9",
       secondary: "#2C302E"
     },
     users: {

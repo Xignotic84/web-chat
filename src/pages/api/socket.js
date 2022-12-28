@@ -23,19 +23,20 @@ export default function SocketHandler(req, res) {
     }).on('connection', socket => {
       console.log("[SERVER] Connection Created")
 
-      socket.on("joinRoom", (arg) => {
+      socket.on('authorIsTyping', (arg) => {
+        socket.broadcast.emit('userIsTyping', arg)
+      })
+
+      socket.on('authorHasStoppedTyping', (arg) => {
+        console.log(true)
+        socket.broadcast.emit('userHasStoppedTyping', arg)
+      })
+
+      socket.on('joinRoom', (arg) => {
         const user = UserService.adduserToRoom({id: socket.id, ...arg})
 
-        console.log(user)
-        socket.broadcast.emit("broadcastNotification", {
-          user: {
-            username: "Admin"
-          },
-          message: "User has joined",
-          timestamp: new Date().getTime()
-        })
 
-        socket.broadcast.emit("userJoinedRoom", user)
+        socket.join("1")
       })
 
       socket.on("sendMessage", (arg) => {
@@ -50,15 +51,6 @@ export default function SocketHandler(req, res) {
         const user = UserService.adduserToRoom({id: socket.id, ...arg})
 
         socket.broadcast.emit("userLeftRoom", user)
-
-        socket.broadcast.emit("broadcastNotification", {
-          user: {
-            username: "Admin"
-          },
-          message: "User has left",
-          timestamp: new Date().getTime()
-        })
-
       })
     })
 
