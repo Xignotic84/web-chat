@@ -20,7 +20,7 @@ export default function Message({data}) {
             {moment(data.timestamp).calendar()}
           </Box>
           <Box>
-            <Popover isLazy placement='bottom-start'>
+            <Popover placement='bottom-start'>
               <Box display={"flex"}>
                 <PopoverTrigger>
                   <Avatar bg={data.user.color} cursor={"pointer"} size={"md"} name={data.user.username}/>

@@ -14,22 +14,29 @@ import {
 import {AddIcon} from "@chakra-ui/icons";
 import {SocketContext} from "../context/socket";
 import {useContext} from "react";
+import { useRouter } from 'next/router'
 
 
 export default function CreateRoom({}) {
   const {isOpen, onOpen, onClose} = useDisclosure()
+  const router = useRouter()
 
   const socket = useContext(SocketContext);
 
 
   function createRoom() {
-    console.log(true)
-    socket.emit('joinRoom', {username: "Xignotc"})
+    socket.emit('joinRoom', {
+      user: {
+        username: "Xignotic"
+      },
+      roomID: router.query.id
+    })
   }
 
   return (
-    <>
-        <Card cursor={"pointer"} onClick={onOpen} w={370} p={0} maxW='md' bg={"white"} borderRadius={0} boxShadow={"none"}>
+      <>
+        <Card cursor={"pointer"} onClick={onOpen} w={370} p={0} maxW='md' bg={"white"} borderRadius={0}
+              boxShadow={"none"}>
           <AddIcon/>
           <CardHeader>
             <Flex>
@@ -46,38 +53,40 @@ export default function CreateRoom({}) {
           </CardHeader>
         </Card>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay/>
-        <ModalContent bg={"white"}>
-          <ModalHeader>Create Room</ModalHeader>
-          <ModalCloseButton/>
-          <ModalBody>
-            <Card w={370} p={0} maxW='md' borderRadius={0} bg={"white"} boxShadow={"none"}>
-              <CardHeader>
-                <Flex>
-                  <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
-                    <AddIcon alt={"Group Icon"} cursor={"pointer"} color={"black"} borderRadius={"20px"} boxSize={38} bg={"gray.200"} p={2}>
-                      <Input type={"file"}/>
-                    </AddIcon>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay/>
+          <ModalContent bg={"white"}>
+            <ModalHeader>Create Room</ModalHeader>
+            <ModalCloseButton/>
+            <ModalBody>
+              <Card w={370} p={0} maxW='md' borderRadius={0} bg={"white"} boxShadow={"none"}>
+                <CardHeader>
+                  <Flex>
+                    <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
+                      <AddIcon alt={"Group Icon"} cursor={"pointer"} color={"black"} borderRadius={"20px"} boxSize={38}
+                               bg={"gray.200"} p={2}>
+                        <Input type={"file"}/>
+                      </AddIcon>
 
-                    <Box bg={"gray.200"} p={2} borderRadius={20}>
-                      <Input p={2} variant={"flushed"} color={"black"} _placeholder={{color: "black"}} placeholder={"New group name"}/>
+                      <Box bg={"gray.200"} p={2} borderRadius={20}>
+                        <Input p={2} variant={"flushed"} color={"black"} _placeholder={{color: "black"}}
+                               placeholder={"New group name"}/>
 
-                    </Box>
+                      </Box>
+                    </Flex>
                   </Flex>
-                </Flex>
-              </CardHeader>
-            </Card>
-          </ModalBody>
+                </CardHeader>
+              </Card>
+            </ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant='ghost' color={"gray"} onClick={createRoom}>Create</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+            <ModalFooter>
+              <Button colorScheme='blue' mr={3} onClick={onClose}>
+                Close
+              </Button>
+              <Button variant='ghost' color={"gray"} onClick={createRoom}>Create</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </>
   )
 }

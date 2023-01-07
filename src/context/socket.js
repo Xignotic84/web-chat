@@ -1,10 +1,9 @@
 import React, { createContext } from 'react';
 import io from "socket.io-client";
 import config from "../config.json";
-import {AuthService} from "../services/Auth";
 
 fetch(`${config.api.baseURL}/socket`)
-const socket = io({reconnectionAttempts: 5, query: {token: AuthService.generateJSWToken({username: "Xignotic"})}})
+const socket = io({autoConnect: false, reconnectionAttempts: 5, query: {token: "1"}})
 
 const SocketContext = createContext(socket)
 

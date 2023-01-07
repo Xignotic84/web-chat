@@ -1,6 +1,5 @@
 
 import * as jose from 'jose'
-import Cookies from 'cookies'
 
 const secret = new TextEncoder().encode(
   'tada',

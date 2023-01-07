@@ -1,4 +1,4 @@
-import {
+import  {
   Card,
   CardHeader,
   CardBody,
@@ -10,7 +10,7 @@ import {
   Image,
   IconButton,
   Flex,
-  Divider
+  Divider, Link
 } from '@chakra-ui/react'
 import {useState} from "react";
 
@@ -18,7 +18,7 @@ export default function MessageGroups({data, selected}) {
   const [isSelected, setSelectedState] = useState(selected)
 
   return (
-    <Box>
+    <Link href={"/rooms/1"}>
       <Card w={370} p={0} maxW='md' borderRadius={0} bg={isSelected ? "gray.200" : "none"} boxShadow={"none"}>
         <CardHeader>
           <Flex>
@@ -43,6 +43,6 @@ export default function MessageGroups({data, selected}) {
         </CardHeader>
       </Card>
       <Divider bg={"gray.300"} margin={"0 auto"} w={"70%"}/>
-    </Box>
+    </Link>
   )
 }
