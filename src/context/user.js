@@ -7,10 +7,10 @@ const UserProvider = ({children}) => {
 
   const token = getCookie("jwtToken")
 
-  let [user, setUser] = useState(token)
+  let [user, setUser] = useState({username: "Xignotic"})
 
   useEffect(() => {
-    setUser(token || false)
+    //setUser(token || false)
   }, [user])
 
   return (

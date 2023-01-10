@@ -45,7 +45,6 @@ export default function MessageInput({user, setMessages}) {
       setUserTypingState(true)
       setTimeout(() => {
         if (!isMessageBarFocused || setMessageToSend.length === 0) {
-          console.log(true)
           setUserTypingState(false)
         }
       }, 3000)

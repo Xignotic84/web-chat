@@ -11,6 +11,7 @@ import {
   ModalOverlay, Text, useDisclosure
 } from "@chakra-ui/react";
 
+import { nanoid } from 'nanoid'
 import {AddIcon} from "@chakra-ui/icons";
 import {SocketContext} from "../context/socket";
 import {useContext} from "react";
@@ -25,12 +26,15 @@ export default function CreateRoom({}) {
 
 
   function createRoom() {
+    const generatedRoomID = nanoid()
     socket.emit('joinRoom', {
       user: {
         username: "Xignotic"
       },
-      roomID: router.query.id
+      roomID: generatedRoomID
     })
+
+    router.push(`/rooms/${generatedRoomID}`)
   }
 
   return (
@@ -83,7 +87,10 @@ export default function CreateRoom({}) {
               <Button colorScheme='blue' mr={3} onClick={onClose}>
                 Close
               </Button>
-              <Button variant='ghost' color={"gray"} onClick={createRoom}>Create</Button>
+              <Button variant='ghost' color={"gray"} onClick={() => {
+                createRoom()
+                onClose()
+              }}>Create</Button>
             </ModalFooter>
           </ModalContent>
         </Modal>

@@ -23,6 +23,10 @@ export default function Room() {
 
   const [messages, setMessages] = useState([])
 
+  useEffect(()=>{
+    setMessages([])
+  },[id])
+
   const socket = useContext(SocketContext);
 
 
@@ -95,8 +99,6 @@ export default function Room() {
             </Box>
             <Box mt={5} borderRadius={20} bg={"white"}>
               <MessageGroups selected={true}/>
-              <MessageGroups/>
-              <MessageGroups/>
               <CreateRoom/>
             </Box>
           </Box>

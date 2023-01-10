@@ -22,6 +22,8 @@ export default function ProfileModal({}) {
   const socket = useContext(SocketContext)
   const {user, setUser} = useContext(UserContext)
 
+  if (user) socket.connect()
+
   const {isOpen, onOpen, onClose} = useDisclosure({defaultIsOpen: !user})
 
   const [username, setUsername] = useState()
@@ -38,7 +40,6 @@ export default function ProfileModal({}) {
     socket.connect()
   }
 
-  console.log(user)
 
   return (
       <>

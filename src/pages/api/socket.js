@@ -32,9 +32,12 @@ export default function SocketHandler(req, res) {
 
       socket.on('joinRoom', (arg) => {
 
+        socket.join("0")
         socket.join(arg.roomID)
 
-        socket.to(arg.roomID).emit('joinRoom', arg);
+        //socket.to(arg.roomID).emit('joinRoom', arg);
+
+        socket.emit("userRoomUpdate", Array.from(socket.rooms).slice(1, socket.rooms.length))
       })
 
       socket.on("sendMessage", (arg) => {
