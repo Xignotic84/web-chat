@@ -20,7 +20,7 @@ export default function MemberList({}) {
 
 
   return (
-      <Box bg={"white"} w={200} borderRadius={20} p={2} alignItems={"center"}>
+      <Box h={"600px"} bg={"white"} w={200} borderRadius={20} p={2} alignItems={"center"}>
         <Heading size={"lg"}>
           Members
         </Heading>

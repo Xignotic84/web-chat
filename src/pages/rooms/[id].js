@@ -87,7 +87,7 @@ export default function Room() {
 
   useEffect(() => {
     scrollToBottom()
-  })
+  }, [messages])
 
   return (
       <Box overflow={"hidden"} display={"flex"}>

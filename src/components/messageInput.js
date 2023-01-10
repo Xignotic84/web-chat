@@ -9,27 +9,28 @@ export default function MessageInput({user, setMessages}) {
   const socket = useContext(SocketContext);
   const router = useRouter()
 
+  function sendMessage() {
+    if (!messageToSend || messageToSend.length === 0) return
+
+    const msgObj = {
+      user: user,
+      message: messageToSend,
+      timestamp: new Date().getTime(),
+      roomID: router.query.id
+    }
+
+    socket.emit('sendMessage', msgObj)
+
+    setMessages((currentMsg) => [
+      ...currentMsg,
+      msgObj,
+    ]);
+
+    setMessageToSend("")
+  }
 
   const handleKeyPress = (e) => {
-    function sendMessage() {
-      if (!messageToSend || messageToSend.length === 0) return
 
-      const msgObj = {
-        user: user,
-        message: messageToSend,
-        timestamp: new Date().getTime(),
-        roomID: router.query.id
-      }
-
-      socket.emit('sendMessage', msgObj)
-
-      setMessages((currentMsg) => [
-        ...currentMsg,
-        msgObj,
-      ]);
-
-      setMessageToSend("")
-    }
 
     function setUserTypingState(isTyping = false) {
 
@@ -76,7 +77,7 @@ export default function MessageInput({user, setMessages}) {
             onChange={(event) => setMessageToSend(event.target.value)}
             onKeyPress={(e) => handleKeyPress(e)}
         />
-        <Button onClick={() => sendMessage("test")}>
+        <Button onClick={() => sendMessage()}>
           Send
         </Button>
       </Box>
