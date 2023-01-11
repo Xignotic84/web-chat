@@ -39,9 +39,8 @@ export default function CreateRoom({}) {
 
   return (
       <>
-        <Card cursor={"pointer"} onClick={onOpen} w={370} p={0} maxW='md' bg={"white"} borderRadius={0}
+        <Card mt={5} cursor={"pointer"} onClick={onOpen} w={370} p={0} maxW='md' bg={"white"} borderRadius={20}
               boxShadow={"none"}>
-          <AddIcon/>
           <CardHeader>
             <Flex>
               <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
@@ -84,7 +83,7 @@ export default function CreateRoom({}) {
             </ModalBody>
 
             <ModalFooter>
-              <Button colorScheme='blue' mr={3} onClick={onClose}>
+              <Button bg={"red.400"} mr={3} onClick={onClose}>
                 Close
               </Button>
               <Button variant='ghost' color={"gray"} onClick={() => {

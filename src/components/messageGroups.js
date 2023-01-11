@@ -24,7 +24,6 @@ export default function MessageGroups({data}) {
   const socket = useContext(SocketContext);
 
   socket.on("userRoomUpdate", (roomList) => {
-    console.log(3, roomList)
     setRooms(roomList)
   })
 

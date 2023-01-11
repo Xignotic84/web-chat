@@ -7,6 +7,7 @@ export default function MessageRoom({room}) {
   const socket = useContext(SocketContext);
   const router = useRouter()
   const [isSelected, setSelectedState] = useState(router.query.id === room)
+  const [lastMessage, setLastMessage] = useState("This is just a test will implement soon")
 
   useEffect(() => {
     setSelectedState(router.query.id === room)
@@ -25,16 +26,13 @@ export default function MessageRoom({room}) {
             <Box>
               <Box position={"relative"}>
                 <Text color={"gray.600"} position={"absolute"} top={0} right={0}>
-                  1 hour ago
+
                 </Text>
               </Box>
               <Heading size='sm' color={"black"}>{room}</Heading>
-
-              <Text color={"text.gray"} isTruncated w={200}> With Chakra UI, I wanted to sync the speed of development with the speed
-                of design. I wanted the developer to be just as excited as the designer to
-                create a screen.
+              <Text color={"text.gray"} isTruncated w={200}>
+                {lastMessage}
               </Text>
-
             </Box>
           </Flex>
         </Flex>

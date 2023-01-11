@@ -1,5 +1,5 @@
 import {Server} from "socket.io";
-
+import MessagesService from "../../services/Messages";
 
 export default function SocketHandler(req, res) {
   if (!res.socket.server.io) {
@@ -19,7 +19,7 @@ export default function SocketHandler(req, res) {
       next()
     }).on('connection', socket => {
       socket.onAny((eventName, args) => {
-        console.log(`[SERVER] [${eventName}]`, args)
+        // console.log(`[SERVER] [${eventName}]`, args)
       })
 
       socket.on('authorIsTyping', (arg) => {
@@ -41,6 +41,7 @@ export default function SocketHandler(req, res) {
       })
 
       socket.on("sendMessage", (arg) => {
+        MessagesService.addMessageToRoom(arg.roomID, arg)
         socket.to(arg.roomID).emit('broadcastMessage', arg)
       })
 

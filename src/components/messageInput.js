@@ -1,6 +1,7 @@
 import {Box, Button, Textarea} from "@chakra-ui/react";
 import {useContext, useState} from "react";
 import {SocketContext} from "../context/socket";
+import { nanoid } from 'nanoid'
 import {useRouter} from "next/router";
 
 export default function MessageInput({user, setMessages}) {
@@ -13,10 +14,11 @@ export default function MessageInput({user, setMessages}) {
     if (!messageToSend || messageToSend.length === 0) return
 
     const msgObj = {
+      id: nanoid(),
+      roomID: router.query.id,
       user: user,
       message: messageToSend,
       timestamp: new Date().getTime(),
-      roomID: router.query.id
     }
 
     socket.emit('sendMessage', msgObj)

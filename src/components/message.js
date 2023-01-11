@@ -8,7 +8,8 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Text,
-  Tag
+  Tag,
+  Flex, Heading
 } from "@chakra-ui/react";
 import moment from "moment"
 
@@ -36,24 +37,21 @@ export default function Message({data}) {
                   </Text>
                 </Box>
               </Box>
-              <PopoverContent bg={"backgrounds.secondary"}>
-                <PopoverHeader fontWeight='semibold'>
-                  <Box p={2} display={"flex"} alignItems={"center"}>
-                    <Avatar cursor={"pointer"} size={"lg"} name={data.user.username}/>
-                    <Box ml={2}>
-                      <Text>
-                        {data.user.username}
-                      </Text>
-                      <Tag size={"sm"} variant={"outline"} colorScheme={"linkedin"}>
-                        {data.user.role || "Member"}
+              <PopoverContent bg={"backgrounds.main"}>
+                <PopoverHeader>
+                  <Flex gap={4} alignItems={"center"}>
+                    <Avatar bg={data.user.color} size={"lg"} name={data.user.username}/>
+                    <Box>
+                      <Tag variant={"subtle"} bg={data.user.color} color={"black"}>
+                        <Heading fontSize={16}>{data.user.username}</Heading>
                       </Tag>
+                      <Text fontSize={14}>
+                        Joined 5 days ago...
+                      </Text>
                     </Box>
-                  </Box>
+                  </Flex>
                 </PopoverHeader>
-                <PopoverArrow bg={"backgrounds.secondary"}/>
-                <PopoverBody>
-                  {data.user.joinedAt}
-                </PopoverBody>
+                <PopoverArrow bg={"backgrounds.main"}/>
               </PopoverContent>
             </Popover>
           </Box>

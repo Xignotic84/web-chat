@@ -11,11 +11,9 @@ export default function Home() {
           <Box ml={10} width={"fit-content"}>
             <Box display={"flex"} bg={"white"} height={65} borderRadius={20} p={2} alignItems={"center"}>
               <Search2Icon/>
-              <Input borderRadius={20} placeholder={"Search"} _placeholder={{color: "black"}}/>
+              <Input border={"0px solid"} outline={"none"} borderRadius={15} placeholder={"Search"} _placeholder={{color: "black"}}/>
             </Box>
             <Box mt={5} borderRadius={20} bg={"white"}>
-              <MessageGroups selected={true}/>
-              <MessageGroups/>
               <MessageGroups/>
               <CreateRoom/>
             </Box>

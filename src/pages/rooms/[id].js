@@ -8,26 +8,26 @@ import {SocketContext} from "../../context/socket";
 import GroupHeading from "../../components/groupHeading";
 import MessageInput from "../../components/messageInput";
 import {useRouter} from "next/router";
-import MemberList from "../../components/memberList";
 import {UserContext} from "../../context/user";
-
+import ProfileModal from "../../components/profileModal";
 
 export default function Room() {
   const router = useRouter()
-  const id = router.query.id
-
+  const socket = useContext(SocketContext);
   const {user} = useContext(UserContext)
-
   const [messageToSend, setMessageToSend] = useState("")
   const [listOfUsersTyping, setListOfUsersTyping] = useState([])
-
   const [messages, setMessages] = useState([])
 
-  useEffect(()=>{
-    setMessages([])
+
+  const id = router.query.id
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/api/messages/${id}`).then(r => r.json()).then(m => setMessages(m))
+
+    //setMessages([])
   },[id])
 
-  const socket = useContext(SocketContext);
 
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function Room() {
     if (socket) {
 
       socket.onAny((eventName, ...args) => {
-        console.log(eventName, args)
+        //console.log(eventName, args)
       });
 
       socket.on('broadcastMessage', (msg) => {
@@ -97,10 +97,11 @@ export default function Room() {
               <Search2Icon/>
               <Input borderRadius={20} placeholder={"Search"} _placeholder={{color: "black"}}/>
             </Box>
-            <Box mt={5} borderRadius={20} bg={"white"}>
-              <MessageGroups selected={true}/>
-              <CreateRoom/>
+            <Box mt={5} borderRadius={20} bg={"white"} maxHeight={"490px"} overflow={"scroll"}>
+              <MessageGroups/>
             </Box>
+            <CreateRoom/>
+            <ProfileModal/>
           </Box>
         </Box>
         <Box ml={5} w={"60%"}>
@@ -125,9 +126,7 @@ export default function Room() {
             </Box>
           </Box>
         </Box>
-        <Box ml={5}>
-          <MemberList/>
-        </Box>
+
       </Box>
   )
 }
