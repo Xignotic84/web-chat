@@ -15,21 +15,24 @@ import {SocketContext} from "../context/socket";
 import {UserContext} from "../context/user";
 import ColorPicker from "./colorPicker";
 import {setCookie} from "cookies-next";
-import { useAtom, atom  } from 'jotai'
+import {useAtom, atom} from 'jotai'
 import {MoonIcon, SettingsIcon, SunIcon} from "@chakra-ui/icons";
+import {useRouter} from "next/router";
 
 export default function ProfileModal({}) {
-
+  const {colorMode, toggleColorMode} = useColorMode();
   const socket = useContext(SocketContext)
+
+  const router = useRouter()
+
   const {user, setUser} = useContext(UserContext)
 
   if (user) socket.connect()
 
   const {isOpen, onOpen, onClose} = useDisclosure({defaultIsOpen: !user})
 
-  const [username, setUsername] = useState()
-  const [color, setColor] = useState()
-
+  const [username, setUsername] = useState(user?.username)
+  const [color, setColor] = useState(user?.color)
 
   function connectToSocket() {
     setCookie("jwtToken", JSON.stringify({username, color}), {httpOnly: true})
@@ -41,67 +44,65 @@ export default function ProfileModal({}) {
     socket.connect()
   }
 
-  const {colorMode, toggleColorMode} = useColorMode();
-
-
   return (
-      <>
-        <Card mt={5} transition={"background-color 500ms"} cursor={"pointer"} w={370} p={0} color={"black"} maxW='md' bg={"white"} borderRadius={20} boxShadow={"none"}>
-          <CardHeader>
-            <Flex alignItems='center' >
-              <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
-                <Avatar name={user.username} bg={user.color}/>
-                <Box>
-                  <Heading size='md' color={"black"}>{user.username}</Heading>
-                  <Text fontSize={12} color={"gray.500"}>Signed in 5 hours ago...</Text>
-                </Box>
-              </Flex>
-              <Flex gap={4} alignItems={"center"}>
-                {colorMode === 'light' ? <MoonIcon onClick={toggleColorMode}/> : <SunIcon onClick={toggleColorMode}/>}
-                <SettingsIcon onClick={onOpen}/>
-              </Flex>
-            </Flex>
-          </CardHeader>
-        </Card>
-        <Modal
-            blockScrollOnMount={true}
-            closeOnOverlayClick={user}
-            isCentered
-            onClose={onClose}
-            closeOnEsc={user}
-            isOpen={isOpen}
-            motionPreset='slideInBottom'
-        >
-          <ModalOverlay/>
-          <ModalContent bg={"white"} color={"black"}>
-            <ModalHeader>Profile</ModalHeader>
-            <ModalBody>
-              <ColorPicker setColor={setColor}/>
-              <Box
-                  display={"flex"}
-                  justifyContent={"center"}
-              >
-                <Avatar
-                    name={username}
-                    size={"lg"}
-                    bg={color}
-                />
+    <>
+      <Card onClick={() => router.push('/')} mt={5} transition={"background-color 500ms"} cursor={"pointer"} w={370} p={0} color={"black"} maxW='md'
+            bg={"white"} borderRadius={20} boxShadow={"none"}>
+        <CardHeader>
+          <Flex alignItems='center'>
+            <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
+              <Avatar name={user.username} bg={user.color}/>
+              <Box>
+                <Heading size='md' color={"black"}>{user.username}</Heading>
+                <Text fontSize={12} color={"gray.500"}>Signed in 5 hours ago...</Text>
               </Box>
-              <Heading size={"sm"}>
-                Username
-              </Heading>
-              <Input defaultValue={username} onChange={(v) => setUsername(v.target.value)} bg={"backgrounds.main"}/>
-            </ModalBody>
-            <ModalFooter>
-              <Button colorScheme='blue' mr={3} onClick={() => {
-                connectToSocket()
-                onClose()
-              }}>
-                Login
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </>
+            </Flex>
+            <Flex gap={4} alignItems={"center"}>
+              {colorMode === 'light' ? <MoonIcon onClick={toggleColorMode}/> : <SunIcon onClick={toggleColorMode}/>}
+              <SettingsIcon onClick={onOpen}/>
+            </Flex>
+          </Flex>
+        </CardHeader>
+      </Card>
+      <Modal
+        blockScrollOnMount={true}
+        closeOnOverlayClick={user}
+        isCentered
+        onClose={onClose}
+        closeOnEsc={user}
+        isOpen={isOpen}
+        motionPreset='slideInBottom'
+      >
+        <ModalOverlay/>
+        <ModalContent bg={"white"} color={"black"}>
+          <ModalHeader>Profile</ModalHeader>
+          <ModalBody>
+            <ColorPicker setColor={setColor}/>
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+            >
+              <Avatar
+                name={username}
+                size={"lg"}
+                bg={color}
+              />
+            </Box>
+            <Heading size={"sm"}>
+              Username
+            </Heading>
+            <Input defaultValue={username} onChange={(v) => setUsername(v.target.value)} bg={"backgrounds.main"}/>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={() => {
+              connectToSocket()
+              onClose()
+            }}>
+              Login
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   )
 }

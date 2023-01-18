@@ -1,7 +1,7 @@
 import {Box, Button, Textarea} from "@chakra-ui/react";
 import {useContext, useState} from "react";
 import {SocketContext} from "../context/socket";
-import { nanoid } from 'nanoid'
+import {nanoid} from 'nanoid'
 import {useRouter} from "next/router";
 
 export default function MessageInput({user, setMessages}) {
@@ -62,26 +62,26 @@ export default function MessageInput({user, setMessages}) {
   }
 
   return (
-      <Box margin={"0 auto"} display={"flex"}>
-        <Textarea
-            borderRadius={20}
-            bg={"backgrounds.main"}
-            border={"none"}
-            outline={"none"}
-            _placeholder={{color: "black"}}
-            color={"black"}
-            placeholder={"Write a message..."}
-            w={"80%"}
-            rows={0}
-            minHeight={"20px"}
-            value={messageToSend}
-            onFocus={setFocused}
-            onChange={(event) => setMessageToSend(event.target.value)}
-            onKeyPress={(e) => handleKeyPress(e)}
-        />
-        <Button onClick={() => sendMessage()}>
-          Send
-        </Button>
-      </Box>
+    <Box height={"auto"} margin={"0 auto"} display={"flex"} bg={"white"}>
+      <Textarea
+        borderRadius={10}
+        bg={"backgrounds.main"}
+        border={"none"}
+        outline={"none"}
+        _placeholder={{color: "black"}}
+        color={"black"}
+        placeholder={"Write a message..."}
+        w={"100%"}
+        overflow={"auto"}
+        minHeight={"20px"}
+        value={messageToSend}
+        onFocus={setFocused}
+        onChange={(event) => setMessageToSend(event.target.value)}
+        onKeyPress={(e) => handleKeyPress(e)}
+      />
+      <Button onClick={() => sendMessage()}>
+        Send
+      </Button>
+    </Box>
   )
 }

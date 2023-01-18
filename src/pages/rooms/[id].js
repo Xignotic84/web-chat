@@ -22,16 +22,12 @@ export default function Room() {
 
   const id = router.query.id
 
-  useEffect(() => {
-    fetch(`http://localhost:3000/api/messages/${id}`).then(r => r.json()).then(m => setMessages(m))
-
-    //setMessages([])
-  },[id])
-
-
 
   useEffect(() => {
     if (!id) return
+
+    fetch(`http://localhost:3000/api/messages/${id}`).then(r => r.json()).then(m => setMessages(m))
+
 
     socket.emit('joinRoom', {roomID: id, user: user})
 
@@ -80,6 +76,7 @@ export default function Room() {
 
 
   const messageEndRef = createRef()
+  const messageBoxRef = createRef()
 
   const scrollToBottom = () => {
     messageEndRef.current?.scrollIntoView({behavior: 'smooth'})
@@ -91,38 +88,28 @@ export default function Room() {
 
   return (
       <Box overflow={"hidden"} display={"flex"}>
-        <Box>
-          <Box ml={10} width={"fit-content"}>
-            <Box display={"flex"} bg={"white"} height={65} borderRadius={20} p={2} alignItems={"center"}>
-              <Search2Icon/>
-              <Input borderRadius={20} placeholder={"Search"} _placeholder={{color: "black"}}/>
-            </Box>
-            <Box mt={5} borderRadius={20} bg={"white"} maxHeight={"490px"} overflow={"scroll"}>
-              <MessageGroups/>
-            </Box>
-            <CreateRoom/>
-            <ProfileModal/>
-          </Box>
+        <Box ml={10} width={"fit-content"}>
+          <MessageGroups/>
+          <CreateRoom/>
+          <ProfileModal/>
         </Box>
         <Box ml={5} w={"60%"}>
           <GroupHeading/>
-          <Box mt={5} position={"relative"} h={"600px"} overflow={"auto"} borderRadius={20} bg={"white"}>
-            <Box>
-              {messages.map((msg, i) => {
-                return <Message key={i} data={msg}/>
-              })}
-            </Box>
+          <Box ref={messageBoxRef} mt={5} position={"relative"} h={"600px"} overflow={"auto"} borderRadius={20} bg={"white"}>
+            {messages.map((msg, i) => {
+              return <Message key={i} data={msg}/>
+            })}
 
             <Box ref={messageEndRef}/>
 
-            <Box position={"sticky"} bottom={2} w={"80%"} left={7}>
+            <Box position={"sticky"} bottom={0} p={2} w={"100%"} height={"auto"} left={7} bg={"white"}>
               <Text color={"gray.400"}>
                 {listOfUsersTyping.map(user => {
                   return user
                 }).join(", ")}
                 {listOfUsersTyping[0] ? " isTyping..." : ""}
               </Text>
-              <MessageInput user={user} setMessages={setMessages}/>
+              <MessageInput mb={2} user={user} setMessages={setMessages}/>
             </Box>
           </Box>
         </Box>
